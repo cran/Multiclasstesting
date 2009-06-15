@@ -10,7 +10,7 @@ Nclasstest(T, GS)
 
 \arguments{
   \item{T}{ A matrix or vector from testing results, wherein the element represents the class type. }
-  \item{GS}{ A matrix or vector from gold standard results, wherein the element represents the class type. }
+  \item{GS}{ A matrix or vector from Gold Standard results, wherein the element represents the class type. }
 }
 \details{
   Specificity, sensitivity, negative and positive predictive value are used in combination to quantify different aspects of the accuracy of a binary test, evaluating different proportions of correctly and incorrectly classified items, when compared to a known classification, considered the gold standard. In this context the \emph{test} is the ensemble of all the operations performed to classify each items; \emph{positive} and \emph{negatives} label the items according to the two classes c=N, P= 0,1  they belong to: \emph{true} (T) and \emph{false} (F) represent the ability of the test to classify coherently or not a given item in the test classification with respect to the gold standard classification. 
@@ -25,7 +25,7 @@ Nclasstest(T, GS)
 }
 
 \references{ C. Nardini, H. Peng, L. Wang, L. Benini, M.D. Kuo, MM-Correction: Meta-analysis-Based Multiple Hypotheses Correction in Omic Studies? \emph{Springer CCIS}, \bold{25} , pp 242--255, 2008. }
-\author{ Nardini, C. and Liu, Y-H. }
+\author{ Nardini, C. and Liu, Y-H.}
 \note{ The test results T and the reference results GS should have the same dimensions. 
 }
 
@@ -40,12 +40,11 @@ GS<-cbind(c(0, 1),c(0, 0),c(1, 1))
 #[1,] 0.6    1     1     0.3333333
  
 #########Multiple classes test #######
-
  GS <- cbind(c(0, -1, 1), c(0, 1, 0), c(1, 0, 1)) 
  T <- cbind(c(1, -1, 1), c(0, 1, -1), c(0, 1, 1)) 
  Nclasstest(T, GS) 
  
- # multi.performance 
+# multi.performance 
 #      class.type   PV       S 
 #   1      -1       1.00    0.5 
 #   2       0       0.25    0.5 
@@ -53,17 +52,17 @@ GS<-cbind(c(0, 1),c(0, 0),c(1, 1))
 
 # binary.performance 
 #          PPV     NPV   Se     Sp 
-#[1,] 0.5714286   0.5    0.8   0.25  
- 
-       
+#[1,] 0.5714286   0.5    0.8   0.25 
+
+        
 \dontshow{
 
 ## The function is currently defined as
 function(T,GS)
 {
      # Using PPV,NPV,Sensitivity and specificity to evaluate the performance of a n-class classification. 
-     # GS is golden standard classification result or reference result, could be a matrix or vector with numeric elements
-     # T is the testing result, could be a matrix or vector with numeric elements
+     # GS is Golden Standard classification result or reference result, could be a matrix or vector with numeric elements
+     # T is the testing result, could be a Boolean (gene-gene interaction) or digital (gene-trait interaction) matrix or vector.
      # GS and T should have the same dimensions
     
     # error message 
@@ -75,7 +74,8 @@ function(T,GS)
 	classes.T <- unique(T) # Calculate all the classes existed in T
 	
 	classes<- union(classes.GS,classes.T) # calculate all the classes in GS and T
-	
+	if(is.na(match(0,classes)))
+	{stop("Test result should include negative(0) case")}
 	ClassLength<- length(classes) 
 	
 	PCount <-NA # true predicted size of the classes
@@ -94,14 +94,24 @@ function(T,GS)
 	
 	for (i in 1:length(classes))
 	{
-		PV[i] <- PCount[i]/Tref[i]
-		S[i]  <- PCount[i]/Ttest[i] 
+		if(Ttest[i]==0)
+		    PV[i]<-0
+		else		
+		    PV[i] <- PCount[i]/Ttest[i]
+		S[i]  <- PCount[i]/Tref[i] 
 	}  
 	
     ClassPos_0<- which(classes==0)	
 	ClassPos_P<- which(classes!=0)
-	PPV<- sum(PCount[ClassPos_P])/sum(Ttest[ClassPos_P])
- 	NPV<- PCount[ClassPos_0]/Ttest[ClassPos_0]
+	if(sum(Ttest[ClassPos_P])==0)
+	   PPV<-0
+	else
+	   PPV<- sum(PCount[ClassPos_P])/sum(Ttest[ClassPos_P])
+	if(Ttest[ClassPos_0]==0)
+	   NPV <-0
+	else
+	   NPV<- PCount[ClassPos_0]/Ttest[ClassPos_0]
+ 	
 	SE <- sum(PCount[ClassPos_P])/sum(Tref[ClassPos_P])
 	SP <- PCount[ClassPos_0]/Tref[ClassPos_0]
 
@@ -117,11 +127,10 @@ function(T,GS)
 	rownames(multi.performance)<-1:length(classes)
 
 	colnames(multi.performance)<-c("class.type","PV","S")
-	
 	if(length(classes)==2)
 		return(list(binary.performance=binary.performance))
 	else
-	        return(list(multi.performance = multi.performance,binary.performance=binary.performance))
+	    return(list(multi.performance = multi.performance,binary.performance=binary.performance))
 }
 }
 }

@@ -45,7 +45,7 @@ When the test classifies $n>2$ categories, these definitions become more complex
 To avoid confusion and ambiguities the actual values of all false can be identified by rewriting the problem in terms of a system of equation based on the relationships indicated in Table \ref{tab:multiclass}. 
 Here $P_t, N_t$ represent the total number of positive and negative items that can be found in the test ($t$) categorization, and $P_{gs},N{gs}$ in the gold standard ($gs$) classification. 
 The definitions can be generalized to $n>2$ classes changing the term negative and positive with the indices of the corresponding classes $c={0,1,...,n}$, and having $C_c$ to design the total number of positives for each given class. 
-The system of equations obtained from the relationships in the rows and columns of Table \ref{tab:multiclass} contains $2 \cdot n$ equations (i.e. $TP+FP = P_t$)  and $2 \cdot n $ unknown ($x_{ij}$), thus it is completely specified.
+The system of equations obtained from the relationships in the rows and columns of Table \ref{tab:multiclass} contains $2 \cdot n$ equations (i.e. $TP+FP = P_t$) and $n \cdot (n-1) / 2 $ unknown ($x_{ij}$), it is thus completely specified for $n \le 3$
 It is worth noticing, that with these general definitions, in case of 2-classes test, Se and Sp appear to be dual scores. Thus, when generalizing to $n$-classes it is possible to define the predictive ability of the test for each given class $c \in {0,1,..,n}$ as $PV_c = T_c/C_t$ and the Sensitivity/Specificity (now called S) for the same class $c$ as $S_c = T_c/C_{gs}$.
 To clarify the situation it is extremely useful to rewrite the definitions as they are written on the right hand-side of Equation \ref{eq:binary.general}, namely:
 
@@ -94,7 +94,7 @@ Sp  & = & T_0 /N_{gs} = T_0/C_{0,gs}\\
 
 This package is developed to estimate the performance of both binary and multiple test (n-ary is used to include both cases). The statistical scores described above are finally calculated as output of the function in this package. 
 
-\section{MultiClassTesting usage}
+\section{Multiclasstesting usage}
 
 \verb@ Nclasstest@ is the only function in \verb@Multiclasstesting@. It serves for the computation of the performance of n-class test.  In binary case, the output includes the statistical scores, PPV, NPV, Se and Sp. In multiple classes case, the output consists of two parts. One is called \verb@multi.performance@, indicating the details of the predictive value (PV) and Sensitivity/Specificity (S) for each class. The other, called \verb@binary.performance@, is to summarize the PPV, NPV, Se and Sp for the classification operations, as described in Equation \ref{eq:n-ary}. 
 This is useful when interested in the ability of the n-ary test to identify positives and negative, globally. A common example of application is the computation of the performances of a gene network algorithm reconstruction: when interested in the directed

@@ -5,14 +5,14 @@
 Performance of N-ary Classification Testing
 }
 \description{
-The functions in this package allows the computation of statistical scores for the evaluation of the performances of a n-ary classification test. In fact, it extends the concepts of Sensitivity (Se), Specificity (Sp), Positive Predictive Value (PPV) and Negative Predictive Value (NPV) -defined for binary tests- to any number of classes.
+The function in this package allows the computation of statistical scores for the evaluation of the performances of a n-ary classification test. In fact, it extends the concepts of Sensitivity (Se), Specificity (Sp), Positive Predictive Value (PPV) and Negative Predictive Value (NPV) -defined for binary tests- to any number of classes.
 }
 \details{
 \tabular{ll}{
 Package: \tab Multiclasstesting\cr
 Type: \tab Package\cr
-Version: \tab 1.0.0\cr
-Date: \tab 2009-04-21\cr
+Version: \tab 1.2.0\cr
+Date: \tab 2009-06-15\cr
 License: \tab GPL-2\cr
 LazyLoad: \tab yes\cr
 }
